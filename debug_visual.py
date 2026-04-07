@@ -28,7 +28,7 @@ def preprocess_face(img, min_dim=160):
 def main():
     OUTPUT_DIR.mkdir(exist_ok=True)
 
-    foto_turma_path = BASE_DIR / "turmas" / "treino_peu.jpeg"
+    foto_turma_path = BASE_DIR / "turmas" / "foto_treino.jpg"
     img_turma = cv2.imread(str(foto_turma_path))
     h_img, w_img = img_turma.shape[:2]
 

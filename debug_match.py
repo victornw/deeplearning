@@ -36,11 +36,11 @@ def main():
     OUTPUT_DIR.mkdir(exist_ok=True)
 
     refs = {
-        "peu.png": BASE_DIR / "alunos" / "peu" / "peu.png",
-        "peu_pequeno.png": BASE_DIR / "alunos" / "peu" / "peu_pequeno.png",
+        "bianca.jpeg": BASE_DIR / "alunos" / "bianca.jpeg",
     }
 
-    turma_path = BASE_DIR / "turmas" / "treino_peu.jpeg"
+    turma_path = BASE_DIR / "turmas" / "foto_treino.jpg"
+    print(turma_path)
     img_turma = cv2.imread(str(turma_path))
     h_img, w_img = img_turma.shape[:2]
 
