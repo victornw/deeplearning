@@ -1,0 +1,14 @@
+[project]
+name = "jiuface"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "deepface",
+    "fastapi",
+    "opencv-python",
+    "python-multipart",
+    "tf-keras",
+    "uvicorn",
+]

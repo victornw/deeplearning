@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JiuFace</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --surface2: #1e1e1e;
+    --border: #2a2a2a;
+    --text: #e5e5e5;
+    --text2: #888;
+    --accent: #22c55e;
+    --accent2: #16a34a;
+    --red: #ef4444;
+    --yellow: #eab308;
+    --blue: #3b82f6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  header h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  header h1 span { color: var(--accent); }
+
+  nav {
+    display: flex;
+    gap: 0.25rem;
+    margin-left: 2rem;
+  }
+
+  nav button {
+    background: none;
+    border: none;
+    color: var(--text2);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.15s;
+  }
+
+  nav button:hover { background: var(--surface2); color: var(--text); }
+  nav button.active { background: var(--surface2); color: var(--accent); font-weight: 600; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .card h2 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+
+  /* Forms */
+  .form-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+
+  .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
+  .form-group label { font-size: 0.8rem; color: var(--text2); font-weight: 500; }
+
+  input[type="text"], input[type="date"] {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.6rem 0.8rem;
+    color: var(--text);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  input:focus { border-color: var(--accent); }
+
+  .file-input {
+    position: relative;
+    display: inline-block;
+  }
+
+  .file-input input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+
+  .file-input .file-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--surface2);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .file-input:hover .file-label { border-color: var(--accent); color: var(--text); }
+  .file-input.has-file .file-label { border-color: var(--accent); color: var(--accent); border-style: solid; }
+
+  .btn {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .btn:hover { background: var(--accent2); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn.btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+  .btn.btn-danger { background: var(--red); }
+  .btn.btn-danger:hover { background: #dc2626; }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+
+  th { color: var(--text2); font-weight: 500; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+  tr:hover td { background: var(--surface2); }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .tag-green { background: #22c55e22; color: var(--accent); }
+  .tag-red { background: #ef444422; color: var(--red); }
+  .tag-yellow { background: #eab30822; color: var(--yellow); }
+  .tag-blue { background: #3b82f622; color: var(--blue); }
+
+  /* Stats */
+  .stats { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; }
+
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    min-width: 140px;
+  }
+
+  .stat .value { font-size: 2rem; font-weight: 700; }
+  .stat .label { font-size: 0.8rem; color: var(--text2); margin-top: 0.2rem; }
+
+  /* Image viewer */
+  .img-container {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    position: relative;
+  }
+
+  .img-container img {
+    width: 100%;
+    display: block;
+  }
+
+  .faces-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .face-thumb {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    aspect-ratio: 1;
+  }
+
+  .face-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .modal-overlay.active { display: flex; }
+
+  .modal-overlay img {
+    max-width: 100%;
+    max-height: 90vh;
+    border-radius: 8px;
+  }
+
+  /* Loading */
+  .spinner {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #333;
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    vertical-align: middle;
+    margin-right: 0.4rem;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-msg {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text2);
+    padding: 2rem;
+    justify-content: center;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.8rem 1.2rem;
+    font-size: 0.9rem;
+    z-index: 300;
+    animation: slideUp 0.2s;
+    max-width: 400px;
+  }
+
+  .toast.success { border-color: var(--accent); }
+  .toast.error { border-color: var(--red); }
+
+  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  .empty { text-align: center; padding: 3rem; color: var(--text2); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span>Jiu</span>Face</h1>
+  <nav>
+    <button class="active" data-page="dashboard">Dashboard</button>
+    <button data-page="alunos">Alunos</button>
+    <button data-page="treinos">Treinos</button>
+  </nav>
+</header>
+
+<div class="container">
+
+  <!-- Dashboard -->
+  <div id="page-dashboard" class="page active">
+    <div class="stats" id="stats"></div>
+
+    <div class="card">
+      <h2>Registrar Presenca</h2>
+      <form id="form-presenca">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Data do treino</label>
+            <input type="date" name="data_treino" id="presenca-data">
+          </div>
+          <div class="form-group">
+            <label>Foto da turma</label>
+            <div class="file-input" id="fi-turma">
+              <input type="file" name="foto" accept="image/*" required>
+              <div class="file-label">Escolher foto</div>
+            </div>
+          </div>
+          <button type="submit" class="btn" id="btn-presenca">Processar</button>
+        </div>
+      </form>
+      <div id="presenca-result"></div>
+    </div>
+
+    <div class="card">
+      <h2>Ultimos Treinos</h2>
+      <div id="ultimos-treinos"></div>
+    </div>
+  </div>
+
+  <!-- Alunos -->
+  <div id="page-alunos" class="page">
+    <div class="card">
+      <h2>Cadastrar Aluno</h2>
+      <form id="form-aluno">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nome</label>
+            <input type="text" name="nome" placeholder="Nome do aluno" required>
+          </div>
+          <div class="form-group">
+            <label>Foto</label>
+            <div class="file-input" id="fi-aluno">
+              <input type="file" name="foto" accept="image/*" required>
+              <div class="file-label">Escolher foto</div>
+            </div>
+          </div>
+          <button type="submit" class="btn">Cadastrar</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Alunos Cadastrados</h2>
+      <div id="lista-alunos"></div>
+    </div>
+  </div>
+
+  <!-- Treinos -->
+  <div id="page-treinos" class="page">
+    <div class="card">
+      <h2>Todos os Treinos</h2>
+      <div id="lista-treinos"></div>
+    </div>
+    <div id="treino-detalhe" style="display:none"></div>
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal">
+  <img src="" alt="">
+</div>
+
+<script>
+const API = '';
+
+// Navigation
+document.querySelectorAll('nav button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('page-' + btn.dataset.page).classList.add('active');
+    if (btn.dataset.page === 'alunos') loadAlunos();
+    if (btn.dataset.page === 'treinos') loadTreinos();
+    if (btn.dataset.page === 'dashboard') loadDashboard();
+  });
+});
+
+// File inputs
+document.querySelectorAll('.file-input input').forEach(input => {
+  input.addEventListener('change', () => {
+    const parent = input.closest('.file-input');
+    const label = parent.querySelector('.file-label');
+    if (input.files.length) {
+      label.textContent = input.files[0].name;
+      parent.classList.add('has-file');
+    } else {
+      label.textContent = 'Escolher foto';
+      parent.classList.remove('has-file');
+    }
+  });
+});
+
+// Modal
+const modal = document.getElementById('modal');
+modal.addEventListener('click', () => modal.classList.remove('active'));
+function showImage(src) {
+  modal.querySelector('img').src = src;
+  modal.classList.add('active');
+}
+
+// Toast
+function toast(msg, type = 'success') {
+  const el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+
+// Loading
+function loading(el) { el.innerHTML = '<div class="loading-msg"><span class="spinner"></span> Processando...</div>'; }
+
+// --- Dashboard ---
+async function loadDashboard() {
+  const [alunos, treinos] = await Promise.all([
+    fetch(API + '/alunos').then(r => r.json()),
+    fetch(API + '/treinos').then(r => r.json()),
+  ]);
+
+  const totalPresencas = treinos.reduce((s, t) => s + t.presentes, 0);
+
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><div class="value">${alunos.length}</div><div class="label">Alunos</div></div>
+    <div class="stat"><div class="value">${treinos.length}</div><div class="label">Treinos</div></div>
+    <div class="stat"><div class="value">${totalPresencas}</div><div class="label">Presencas</div></div>
+  `;
+
+  const recent = treinos.slice(0, 5);
+  if (!recent.length) {
+    document.getElementById('ultimos-treinos').innerHTML = '<div class="empty">Nenhum treino registrado</div>';
+    return;
+  }
+
+  document.getElementById('ultimos-treinos').innerHTML = `
+    <table>
+      <thead><tr><th>Data</th><th>Presentes</th><th>Nao ID</th><th>Total</th><th></th></tr></thead>
+      <tbody>${recent.map(t => `
+        <tr>
+          <td>${t.data}</td>
+          <td><span class="tag tag-green">${t.presentes}</span></td>
+          <td><span class="tag tag-red">${t.nao_identificados}</span></td>
+          <td>${t.total_rostos} rostos</td>
+          <td><button class="btn btn-sm" onclick="viewTreino(${t.id})">Ver</button></td>
+        </tr>
+      `).join('')}</tbody>
+    </table>
+  `;
+}
+
+// --- Presenca ---
+document.getElementById('presenca-data').valueAsDate = new Date();
+
+document.getElementById('form-presenca').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const btn = document.getElementById('btn-presenca');
+  const result = document.getElementById('presenca-result');
+
+  btn.disabled = true;
+  btn.textContent = 'Processando...';
+  loading(result);
+
+  const fd = new FormData(form);
+  try {
+    const res = await fetch(API + '/treinos', { method: 'POST', body: fd });
+    if (!res.ok) throw new Error((await res.json()).detail || 'Erro');
+    const data = await res.json();
+
+    result.innerHTML = `
+      <div style="margin-top:1rem">
+        <div style="display:flex;gap:1rem;margin-bottom:1rem">
+          <span class="tag tag-green">${data.presentes.length} presentes</span>
+          <span class="tag tag-red">${data.nao_identificados} nao identificados</span>
+          <span class="tag tag-blue">${data.total_rostos} rostos</span>
+        </div>
+        ${data.presentes.length ? `
+          <table>
+            <thead><tr><th>Aluno</th><th>Distancia</th></tr></thead>
+            <tbody>${data.presentes.map(p => `
+              <tr><td>${p.nome}</td><td>${p.distancia.toFixed(4)}</td></tr>
+            `).join('')}</tbody>
+          </table>
+        ` : ''}
+        <div class="img-container" style="margin-top:1rem" onclick="showImage(API + '/treinos/${data.treino_id}/resultado')">
+          <img src="${API}/treinos/${data.treino_id}/resultado" alt="Resultado">
+        </div>
+      </div>
+    `;
+    toast('Treino #' + data.treino_id + ' processado!');
+    form.reset();
+    document.querySelectorAll('.file-input').forEach(fi => {
+      fi.classList.remove('has-file');
+      fi.querySelector('.file-label').textContent = 'Escolher foto';
+    });
+    document.getElementById('presenca-data').valueAsDate = new Date();
+    loadDashboard();
+  } catch (err) {
+    result.innerHTML = '';
+    toast(err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Processar';
+  }
+});
+
+// --- Alunos ---
+async function loadAlunos() {
+  const el = document.getElementById('lista-alunos');
+  const alunos = await fetch(API + '/alunos').then(r => r.json());
+
+  if (!alunos.length) {
+    el.innerHTML = '<div class="empty">Nenhum aluno cadastrado</div>';
+    return;
+  }
+
+  el.innerHTML = `
+    <table>
+      <thead><tr><th>Nome</th><th>Fotos</th><th>Desde</th><th></th></tr></thead>
+      <tbody>${alunos.map(a => `
+        <tr>
+          <td><strong>${a.nome}</strong></td>
+          <td><span class="tag tag-blue">${a.fotos} foto(s)</span></td>
+          <td style="color:var(--text2)">${a.created_at.split(' ')[0]}</td>
+          <td><button class="btn btn-sm btn-danger" onclick="deleteAluno(${a.id}, '${a.nome}')">Remover</button></td>
+        </tr>
+      `).join('')}</tbody>
+    </table>
+  `;
+}
+
+document.getElementById('form-aluno').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  try {
+    const res = await fetch(API + '/alunos', { method: 'POST', body: fd });
+    if (!res.ok) throw new Error((await res.json()).detail || 'Erro');
+    const data = await res.json();
+    toast(data.nome + ' cadastrado!');
+    e.target.reset();
+    document.querySelector('#fi-aluno').classList.remove('has-file');
+    document.querySelector('#fi-aluno .file-label').textContent = 'Escolher foto';
+    loadAlunos();
+  } catch (err) {
+    toast(err.message, 'error');
+  }
+});
+
+async function deleteAluno(id, nome) {
+  if (!confirm('Remover ' + nome + '?')) return;
+  await fetch(API + '/alunos/' + id, { method: 'DELETE' });
+  toast(nome + ' removido');
+  loadAlunos();
+}
+
+// --- Treinos ---
+async function loadTreinos() {
+  const el = document.getElementById('lista-treinos');
+  const treinos = await fetch(API + '/treinos').then(r => r.json());
+
+  if (!treinos.length) {
+    el.innerHTML = '<div class="empty">Nenhum treino registrado</div>';
+    return;
+  }
+
+  el.innerHTML = `
+    <table>
+      <thead><tr><th>ID</th><th>Data</th><th>Presentes</th><th>Nao ID</th><th>Total</th><th></th></tr></thead>
+      <tbody>${treinos.map(t => `
+        <tr>
+          <td>#${t.id}</td>
+          <td>${t.data}</td>
+          <td><span class="tag tag-green">${t.presentes}</span></td>
+          <td><span class="tag tag-red">${t.nao_identificados}</span></td>
+          <td>${t.total_rostos}</td>
+          <td><button class="btn btn-sm" onclick="viewTreino(${t.id})">Detalhes</button></td>
+        </tr>
+      `).join('')}</tbody>
+    </table>
+  `;
+}
+
+async function viewTreino(id) {
+  // Navigate to treinos page
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelector('[data-page="treinos"]').classList.add('active');
+  document.getElementById('page-treinos').classList.add('active');
+
+  const el = document.getElementById('treino-detalhe');
+  el.style.display = 'block';
+  loading(el);
+
+  const treino = await fetch(API + '/treinos/' + id).then(r => r.json());
+
+  el.innerHTML = `
+    <div class="card">
+      <h2>Treino #${treino.id} - ${treino.data}</h2>
+      <div class="img-container" style="max-width:800px;margin:1rem 0" onclick="showImage(API + '/treinos/${id}/resultado')">
+        <img src="${API}/treinos/${id}/resultado" alt="Resultado">
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Presentes (${treino.presentes.length})</h2>
+        ${treino.presentes.length ? `
+          <table>
+            <thead><tr><th>Aluno</th><th>Distancia</th></tr></thead>
+            <tbody>${treino.presentes.map(p => `
+              <tr><td>${p.nome}</td><td>${p.distancia.toFixed(4)}</td></tr>
+            `).join('')}</tbody>
+          </table>
+        ` : '<div class="empty">Ninguem identificado</div>'}
+      </div>
+
+      <div class="card">
+        <h2>Nao Identificados (${treino.nao_identificados.length})</h2>
+        ${treino.nao_identificados.length ? `
+          <div class="faces-grid">
+            ${treino.nao_identificados.map(n => `
+              <div class="face-thumb" onclick="showImage(API + '/treinos/${id}/nao-identificados/${n.id}')">
+                <img src="${API}/treinos/${id}/nao-identificados/${n.id}" alt="?">
+              </div>
+            `).join('')}
+          </div>
+        ` : '<div class="empty">Todos identificados!</div>'}
+      </div>
+    </div>
+  `;
+
+  el.scrollIntoView({ behavior: 'smooth' });
+  loadTreinos();
+}
+
+// Init
+loadDashboard();
+</script>
+</body>
+</html>
