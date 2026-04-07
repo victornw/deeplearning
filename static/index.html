@@ -17,6 +17,7 @@
     --red: #ef4444;
     --yellow: #eab308;
     --blue: #3b82f6;
+    --purple: #a855f7;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -40,19 +41,10 @@
     z-index: 100;
   }
 
-  header h1 {
-    font-size: 1.4rem;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-  }
-
+  header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.5px; }
   header h1 span { color: var(--accent); }
 
-  nav {
-    display: flex;
-    gap: 0.25rem;
-    margin-left: 2rem;
-  }
+  nav { display: flex; gap: 0.25rem; margin-left: 2rem; }
 
   nav button {
     background: none;
@@ -81,11 +73,7 @@
     margin-bottom: 1rem;
   }
 
-  .card h2 {
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-    font-weight: 600;
-  }
+  .card h2 { font-size: 1.1rem; margin-bottom: 1rem; font-weight: 600; }
 
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
 
@@ -101,7 +89,7 @@
   .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
   .form-group label { font-size: 0.8rem; color: var(--text2); font-weight: 500; }
 
-  input[type="text"], input[type="date"] {
+  input[type="text"], input[type="date"], input[type="time"], select {
     background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -112,12 +100,11 @@
     transition: border-color 0.15s;
   }
 
-  input:focus { border-color: var(--accent); }
+  input:focus, select:focus { border-color: var(--accent); }
 
-  .file-input {
-    position: relative;
-    display: inline-block;
-  }
+  select option { background: var(--surface2); }
+
+  .file-input { position: relative; display: inline-block; }
 
   .file-input input[type="file"] {
     position: absolute;
@@ -161,14 +148,21 @@
   .btn:hover { background: var(--accent2); }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .btn.btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
-  .btn.btn-danger { background: var(--red); }
+  .btn.btn-danger { background: var(--red); color: #fff; }
   .btn.btn-danger:hover { background: #dc2626; }
+  .btn.btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .btn.btn-outline:hover { border-color: var(--accent); color: var(--accent); background: transparent; }
+  .btn.btn-yellow { background: var(--yellow); color: #000; }
+  .btn.btn-yellow:hover { background: #ca8a04; }
+  .btn.btn-blue { background: var(--blue); color: #fff; }
+  .btn.btn-blue:hover { background: #2563eb; }
 
   /* Tables */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
+  table { width: 100%; border-collapse: collapse; }
 
   th, td {
     text-align: left;
@@ -193,9 +187,11 @@
   .tag-red { background: #ef444422; color: var(--red); }
   .tag-yellow { background: #eab30822; color: var(--yellow); }
   .tag-blue { background: #3b82f622; color: var(--blue); }
+  .tag-purple { background: #a855f722; color: var(--purple); }
+  .tag-gray { background: #88888822; color: var(--text2); }
 
   /* Stats */
-  .stats { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; }
+  .stats { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
 
   .stat {
     background: var(--surface);
@@ -217,10 +213,7 @@
     position: relative;
   }
 
-  .img-container img {
-    width: 100%;
-    display: block;
-  }
+  .img-container img { width: 100%; display: block; }
 
   .faces-grid {
     display: grid;
@@ -234,6 +227,7 @@
     overflow: hidden;
     border: 1px solid var(--border);
     aspect-ratio: 1;
+    cursor: pointer;
   }
 
   .face-thumb img { width: 100%; height: 100%; object-fit: cover; }
@@ -251,12 +245,36 @@
   }
 
   .modal-overlay.active { display: flex; }
+  .modal-overlay img { max-width: 100%; max-height: 90vh; border-radius: 8px; }
 
-  .modal-overlay img {
-    max-width: 100%;
-    max-height: 90vh;
-    border-radius: 8px;
+  /* Dialog modal */
+  .dialog-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
   }
+
+  .dialog-overlay.active { display: flex; }
+
+  .dialog {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .dialog h3 { font-size: 1rem; margin-bottom: 0.5rem; }
+  .dialog p { color: var(--text2); font-size: 0.9rem; margin-bottom: 1.25rem; }
+  .dialog .dialog-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
+  .dialog img { width: 100%; border-radius: 8px; margin-bottom: 1rem; border: 1px solid var(--border); }
+  .dialog input[type="text"] { width: 100%; margin-bottom: 1rem; }
 
   /* Loading */
   .spinner {
@@ -291,7 +309,7 @@
     border-radius: 10px;
     padding: 0.8rem 1.2rem;
     font-size: 0.9rem;
-    z-index: 300;
+    z-index: 400;
     animation: slideUp 0.2s;
     max-width: 400px;
   }
@@ -302,6 +320,123 @@
   @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
   .empty { text-align: center; padding: 3rem; color: var(--text2); }
+
+  /* Agenda / Calendar */
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.75rem;
+  }
+
+  .day-col {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .day-col.today { border-color: var(--accent); }
+
+  .day-header {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .day-col.today .day-header { color: var(--accent); }
+
+  .day-slots { padding: 0.5rem; min-height: 80px; }
+
+  .slot {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.5rem 0.6rem;
+    margin-bottom: 0.4rem;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .slot-info { flex: 1; min-width: 0; }
+  .slot-time { font-weight: 600; color: var(--accent); display: block; }
+  .slot-local { color: var(--text2); font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .slot-del { color: var(--text2); cursor: pointer; font-size: 1rem; line-height: 1; flex-shrink: 0; padding: 0 2px; }
+  .slot-del:hover { color: var(--red); }
+
+  /* Resultado do processamento */
+  .result-sections { display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem; }
+
+  .result-section {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .result-section-header {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .result-section-body { padding: 0.5rem 0; }
+
+  .result-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.55rem 1rem;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border);
+    gap: 0.75rem;
+  }
+
+  .result-row:last-child { border-bottom: none; }
+  .result-row-name { flex: 1; }
+  .result-row-meta { color: var(--text2); font-size: 0.8rem; }
+
+  /* Aula selector */
+  .aula-hint {
+    font-size: 0.8rem;
+    color: var(--text2);
+    margin-top: 0.25rem;
+  }
+
+  .checkin-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+  .checkin-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 0.2rem 0.7rem;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .checkin-chip .chip-del {
+    cursor: pointer;
+    color: var(--text2);
+    font-size: 0.9rem;
+  }
+
+  .checkin-chip .chip-del:hover { color: var(--red); }
+
+  @media (max-width: 700px) {
+    .week-grid { grid-template-columns: repeat(4, 1fr); }
+  }
 </style>
 </head>
 <body>
@@ -310,6 +445,7 @@
   <h1><span>Jiu</span>Face</h1>
   <nav>
     <button class="active" data-page="dashboard">Dashboard</button>
+    <button data-page="agenda">Agenda</button>
     <button data-page="alunos">Alunos</button>
     <button data-page="treinos">Treinos</button>
   </nav>
@@ -322,12 +458,18 @@
     <div class="stats" id="stats"></div>
 
     <div class="card">
-      <h2>Registrar Presenca</h2>
+      <h2>Registrar Presença</h2>
       <form id="form-presenca">
         <div class="form-row">
           <div class="form-group">
             <label>Data do treino</label>
             <input type="date" name="data_treino" id="presenca-data">
+          </div>
+          <div class="form-group">
+            <label>Aula</label>
+            <select name="aula_id" id="presenca-aula" style="min-width:220px">
+              <option value="">Sem vínculo com aula</option>
+            </select>
           </div>
           <div class="form-group">
             <label>Foto da turma</label>
@@ -338,13 +480,67 @@
           </div>
           <button type="submit" class="btn" id="btn-presenca">Processar</button>
         </div>
+        <div class="aula-hint" id="aula-hint"></div>
       </form>
       <div id="presenca-result"></div>
     </div>
 
     <div class="card">
-      <h2>Ultimos Treinos</h2>
+      <h2>Últimos Treinos</h2>
       <div id="ultimos-treinos"></div>
+    </div>
+  </div>
+
+  <!-- Agenda -->
+  <div id="page-agenda" class="page">
+    <div class="card">
+      <h2>Grade Semanal de Treinos</h2>
+      <p style="color:var(--text2);font-size:0.85rem;margin-bottom:1.25rem">
+        Defina os horários recorrentes. Ao registrar uma presença, as aulas do dia são geradas automaticamente.
+      </p>
+      <div class="week-grid" id="week-grid"></div>
+
+      <div style="margin-top:1.5rem">
+        <h2 style="margin-bottom:1rem">Adicionar Horário</h2>
+        <form id="form-horario">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Dia da semana</label>
+              <select name="dia_semana">
+                <option value="0">Segunda</option>
+                <option value="1">Terça</option>
+                <option value="2">Quarta</option>
+                <option value="3">Quinta</option>
+                <option value="4">Sexta</option>
+                <option value="5">Sábado</option>
+                <option value="6">Domingo</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Horário</label>
+              <input type="time" name="horario" required>
+            </div>
+            <div class="form-group">
+              <label>Local / Academia</label>
+              <input type="text" name="local" placeholder="Ex: Academia Central" required style="min-width:200px">
+            </div>
+            <button type="submit" class="btn">Adicionar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Aulas do Dia</h2>
+      <div class="form-row" style="margin-bottom:1rem">
+        <div class="form-group">
+          <label>Data</label>
+          <input type="date" id="agenda-data">
+        </div>
+        <button class="btn btn-outline" onclick="loadAulasDia()">Carregar</button>
+        <button class="btn" onclick="gerarAulasDia()">Gerar da grade</button>
+      </div>
+      <div id="aulas-dia"></div>
     </div>
   </div>
 
@@ -387,15 +583,43 @@
 
 </div>
 
-<!-- Modal -->
+<!-- Modal imagem -->
 <div class="modal-overlay" id="modal">
   <img src="" alt="">
 </div>
 
+<!-- Dialog nomear rosto -->
+<div class="dialog-overlay" id="dialog-nomear">
+  <div class="dialog">
+    <h3>Identificar aluno</h3>
+    <p>Informe o nome do aluno para cadastrá-lo e validar a presença.</p>
+    <img id="dialog-nomear-img" src="" alt="">
+    <input type="text" id="dialog-nomear-input" placeholder="Nome do aluno">
+    <div class="dialog-actions">
+      <button class="btn btn-outline" onclick="fecharDialogNomear()">Cancelar</button>
+      <button class="btn" onclick="confirmarNomear()">Cadastrar e validar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Dialog checkin -->
+<div class="dialog-overlay" id="dialog-checkin">
+  <div class="dialog">
+    <h3>Adicionar check-in</h3>
+    <p>Selecione o aluno para adicionar o check-in nesta aula.</p>
+    <select id="dialog-checkin-aluno" style="width:100%;margin-bottom:1rem"></select>
+    <div class="dialog-actions">
+      <button class="btn btn-outline" onclick="fecharDialogCheckin()">Cancelar</button>
+      <button class="btn" onclick="confirmarCheckin()">Adicionar</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const API = '';
+const DIAS = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
 
-// Navigation
+// --- Navigation ---
 document.querySelectorAll('nav button').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
@@ -405,6 +629,7 @@ document.querySelectorAll('nav button').forEach(btn => {
     if (btn.dataset.page === 'alunos') loadAlunos();
     if (btn.dataset.page === 'treinos') loadTreinos();
     if (btn.dataset.page === 'dashboard') loadDashboard();
+    if (btn.dataset.page === 'agenda') loadAgenda();
   });
 });
 
@@ -423,7 +648,7 @@ document.querySelectorAll('.file-input input').forEach(input => {
   });
 });
 
-// Modal
+// Modal imagem
 const modal = document.getElementById('modal');
 modal.addEventListener('click', () => modal.classList.remove('active'));
 function showImage(src) {
@@ -437,11 +662,12 @@ function toast(msg, type = 'success') {
   el.className = 'toast ' + type;
   el.textContent = msg;
   document.body.appendChild(el);
-  setTimeout(() => el.remove(), 3000);
+  setTimeout(() => el.remove(), 3500);
 }
 
-// Loading
-function loading(el) { el.innerHTML = '<div class="loading-msg"><span class="spinner"></span> Processando...</div>'; }
+function loading(el) {
+  el.innerHTML = '<div class="loading-msg"><span class="spinner"></span> Processando...</div>';
+}
 
 // --- Dashboard ---
 async function loadDashboard() {
@@ -450,37 +676,66 @@ async function loadDashboard() {
     fetch(API + '/treinos').then(r => r.json()),
   ]);
 
-  const totalPresencas = treinos.reduce((s, t) => s + t.presentes, 0);
+  const totalPresencas = treinos.reduce((s, t) => s + (t.presentes || 0), 0);
 
   document.getElementById('stats').innerHTML = `
     <div class="stat"><div class="value">${alunos.length}</div><div class="label">Alunos</div></div>
     <div class="stat"><div class="value">${treinos.length}</div><div class="label">Treinos</div></div>
-    <div class="stat"><div class="value">${totalPresencas}</div><div class="label">Presencas</div></div>
+    <div class="stat"><div class="value">${totalPresencas}</div><div class="label">Presenças</div></div>
   `;
 
   const recent = treinos.slice(0, 5);
   if (!recent.length) {
     document.getElementById('ultimos-treinos').innerHTML = '<div class="empty">Nenhum treino registrado</div>';
-    return;
+  } else {
+    document.getElementById('ultimos-treinos').innerHTML = `
+      <table>
+        <thead><tr><th>Data</th><th>Presentes</th><th>Não ID</th><th>Total</th><th></th></tr></thead>
+        <tbody>${recent.map(t => `
+          <tr>
+            <td>${t.data}</td>
+            <td><span class="tag tag-green">${t.presentes}</span></td>
+            <td><span class="tag tag-red">${t.nao_identificados}</span></td>
+            <td>${t.total_rostos} rostos</td>
+            <td><button class="btn btn-sm" onclick="viewTreino(${t.id})">Ver</button></td>
+          </tr>
+        `).join('')}</tbody>
+      </table>
+    `;
   }
 
-  document.getElementById('ultimos-treinos').innerHTML = `
-    <table>
-      <thead><tr><th>Data</th><th>Presentes</th><th>Nao ID</th><th>Total</th><th></th></tr></thead>
-      <tbody>${recent.map(t => `
-        <tr>
-          <td>${t.data}</td>
-          <td><span class="tag tag-green">${t.presentes}</span></td>
-          <td><span class="tag tag-red">${t.nao_identificados}</span></td>
-          <td>${t.total_rostos} rostos</td>
-          <td><button class="btn btn-sm" onclick="viewTreino(${t.id})">Ver</button></td>
-        </tr>
-      `).join('')}</tbody>
-    </table>
-  `;
+  // Carrega aulas do dia para o seletor
+  await loadAulasSeletor();
 }
 
-// --- Presenca ---
+// --- Seletor de aulas no formulário de presença ---
+async function loadAulasSeletor() {
+  const dataInput = document.getElementById('presenca-data');
+  const data = dataInput.value;
+  if (!data) return;
+
+  const aulas = await fetch(API + '/aulas?data=' + data).then(r => r.json());
+  const sel = document.getElementById('presenca-aula');
+  const hint = document.getElementById('aula-hint');
+
+  sel.innerHTML = '<option value="">Sem vínculo com aula</option>';
+  aulas.forEach(a => {
+    const opt = document.createElement('option');
+    opt.value = a.id;
+    opt.textContent = `${a.horario} — ${a.local} (${a.total_checkins} check-ins)`;
+    sel.appendChild(opt);
+  });
+
+  if (aulas.length === 0) {
+    hint.textContent = 'Nenhuma aula cadastrada para este dia.';
+  } else {
+    hint.textContent = `${aulas.length} aula(s) disponível(is).`;
+  }
+}
+
+document.getElementById('presenca-data').addEventListener('change', loadAulasSeletor);
+
+// --- Presença ---
 document.getElementById('presenca-data').valueAsDate = new Date();
 
 document.getElementById('form-presenca').addEventListener('submit', async (e) => {
@@ -494,31 +749,15 @@ document.getElementById('form-presenca').addEventListener('submit', async (e) =>
   loading(result);
 
   const fd = new FormData(form);
+  // Remove aula_id vazio para não enviar string vazia
+  if (!fd.get('aula_id')) fd.delete('aula_id');
+
   try {
     const res = await fetch(API + '/treinos', { method: 'POST', body: fd });
     if (!res.ok) throw new Error((await res.json()).detail || 'Erro');
     const data = await res.json();
 
-    result.innerHTML = `
-      <div style="margin-top:1rem">
-        <div style="display:flex;gap:1rem;margin-bottom:1rem">
-          <span class="tag tag-green">${data.presentes.length} presentes</span>
-          <span class="tag tag-red">${data.nao_identificados} nao identificados</span>
-          <span class="tag tag-blue">${data.total_rostos} rostos</span>
-        </div>
-        ${data.presentes.length ? `
-          <table>
-            <thead><tr><th>Aluno</th><th>Distancia</th></tr></thead>
-            <tbody>${data.presentes.map(p => `
-              <tr><td>${p.nome}</td><td>${p.distancia.toFixed(4)}</td></tr>
-            `).join('')}</tbody>
-          </table>
-        ` : ''}
-        <div class="img-container" style="margin-top:1rem" onclick="showImage(API + '/treinos/${data.treino_id}/resultado')">
-          <img src="${API}/treinos/${data.treino_id}/resultado" alt="Resultado">
-        </div>
-      </div>
-    `;
+    renderResultado(result, data);
     toast('Treino #' + data.treino_id + ' processado!');
     form.reset();
     document.querySelectorAll('.file-input').forEach(fi => {
@@ -526,6 +765,7 @@ document.getElementById('form-presenca').addEventListener('submit', async (e) =>
       fi.querySelector('.file-label').textContent = 'Escolher foto';
     });
     document.getElementById('presenca-data').valueAsDate = new Date();
+    loadAulasSeletor();
     loadDashboard();
   } catch (err) {
     result.innerHTML = '';
@@ -534,6 +774,379 @@ document.getElementById('form-presenca').addEventListener('submit', async (e) =>
     btn.disabled = false;
     btn.textContent = 'Processar';
   }
+});
+
+function renderResultado(container, data) {
+  const { treino_id, validados = [], recusados = [], pendentes = [], nao_identificados = [], total_rostos } = data;
+
+  let html = `
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin:1rem 0 0.75rem">
+      <span class="tag tag-green">${validados.length} validados</span>
+      <span class="tag tag-red">${recusados.length} recusados</span>
+      <span class="tag tag-yellow">${pendentes.length} pendentes</span>
+      <span class="tag tag-purple">${nao_identificados.length} não identificados</span>
+      <span class="tag tag-blue">${total_rostos} rostos</span>
+    </div>
+
+    <div class="result-sections">
+  `;
+
+  if (validados.length) {
+    html += `
+      <div class="result-section">
+        <div class="result-section-header" style="color:var(--accent)">
+          ✅ Presenças Validadas (${validados.length})
+        </div>
+        <div class="result-section-body">
+          ${validados.map(v => `
+            <div class="result-row">
+              <span class="result-row-name">${v.nome}</span>
+              <span class="result-row-meta">dist: ${v.distancia.toFixed(4)}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  if (recusados.length) {
+    html += `
+      <div class="result-section">
+        <div class="result-section-header" style="color:var(--red)">
+          ❌ Presenças Recusadas — fez check-in mas não estava na foto (${recusados.length})
+        </div>
+        <div class="result-section-body">
+          ${recusados.map(r => `
+            <div class="result-row">
+              <span class="result-row-name">${r.nome}</span>
+              <span class="result-row-meta">ausente</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  if (pendentes.length) {
+    html += `
+      <div class="result-section">
+        <div class="result-section-header" style="color:var(--yellow)">
+          ⚠️ Pendentes — estava na foto mas não fez check-in (${pendentes.length})
+        </div>
+        <div class="result-section-body">
+          ${pendentes.map(p => `
+            <div class="result-row" id="pendente-${p.presenca_id}">
+              <span class="result-row-name">${p.nome}</span>
+              <span class="result-row-meta">dist: ${p.distancia.toFixed(4)}</span>
+              <button class="btn btn-sm btn-yellow" onclick="confirmarPresenca(${treino_id}, ${p.presenca_id})">Confirmar</button>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  if (nao_identificados.length) {
+    html += `
+      <div class="result-section">
+        <div class="result-section-header" style="color:var(--purple)">
+          👤 Não Identificados — possíveis novatos (${nao_identificados.length})
+        </div>
+        <div class="result-section-body">
+          <div style="padding:0.75rem 1rem">
+            <div class="faces-grid">
+              ${nao_identificados.map(n => `
+                <div style="text-align:center">
+                  <div class="face-thumb" onclick="showImage(API + '/treinos/${treino_id}/nao-identificados/${n.face_id}')">
+                    <img src="${API}/treinos/${treino_id}/nao-identificados/${n.face_id}" alt="?">
+                  </div>
+                  <button class="btn btn-sm" style="margin-top:0.4rem;width:100%"
+                    onclick="abrirDialogNomear(${treino_id}, ${n.face_id})">Nomear</button>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  html += `
+    </div>
+    <div class="img-container" style="margin-top:1rem" onclick="showImage(API + '/treinos/${treino_id}/resultado')">
+      <img src="${API}/treinos/${treino_id}/resultado" alt="Resultado">
+    </div>
+  `;
+
+  container.innerHTML = html;
+}
+
+async function confirmarPresenca(treinoId, presencaId) {
+  const row = document.getElementById('pendente-' + presencaId);
+  try {
+    const res = await fetch(API + `/treinos/${treinoId}/confirmar/${presencaId}`, { method: 'POST' });
+    if (!res.ok) throw new Error('Erro ao confirmar');
+    const nome = row.querySelector('.result-row-name').textContent;
+    row.querySelector('button').remove();
+    row.querySelector('.result-row-meta').textContent = 'confirmado';
+    row.querySelector('.result-row-meta').style.color = 'var(--accent)';
+    toast(nome + ' — presença confirmada!');
+  } catch (err) {
+    toast(err.message, 'error');
+  }
+}
+
+// --- Dialog nomear ---
+let _nomearTreinoId = null;
+let _nomearFaceId = null;
+
+function abrirDialogNomear(treinoId, faceId) {
+  _nomearTreinoId = treinoId;
+  _nomearFaceId = faceId;
+  document.getElementById('dialog-nomear-img').src = API + `/treinos/${treinoId}/nao-identificados/${faceId}`;
+  document.getElementById('dialog-nomear-input').value = '';
+  document.getElementById('dialog-nomear').classList.add('active');
+  setTimeout(() => document.getElementById('dialog-nomear-input').focus(), 100);
+}
+
+function fecharDialogNomear() {
+  document.getElementById('dialog-nomear').classList.remove('active');
+}
+
+async function confirmarNomear() {
+  const nome = document.getElementById('dialog-nomear-input').value.trim();
+  if (!nome) { toast('Informe o nome do aluno', 'error'); return; }
+
+  const fd = new FormData();
+  fd.append('nome', nome);
+
+  try {
+    const res = await fetch(API + `/treinos/${_nomearTreinoId}/nao-identificados/${_nomearFaceId}/nomear`, {
+      method: 'POST', body: fd
+    });
+    if (!res.ok) throw new Error((await res.json()).detail || 'Erro');
+    toast(nome + ' cadastrado e presença registrada!');
+    fecharDialogNomear();
+    // Remove a thumb da tela
+    const thumb = document.querySelector(`[onclick="abrirDialogNomear(${_nomearTreinoId}, ${_nomearFaceId})"]`);
+    if (thumb) thumb.closest('div[style]').remove();
+  } catch (err) {
+    toast(err.message, 'error');
+  }
+}
+
+document.getElementById('dialog-nomear').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) fecharDialogNomear();
+});
+
+// --- Agenda ---
+async function loadAgenda() {
+  await loadWeekGrid();
+  document.getElementById('agenda-data').valueAsDate = new Date();
+  await loadAulasDia();
+}
+
+async function loadWeekGrid() {
+  const horarios = await fetch(API + '/horarios').then(r => r.json());
+  const today = new Date().getDay(); // 0=dom, 1=seg...
+  // Converte JS (0=dom) para nosso padrão (0=seg)
+  const todayIdx = today === 0 ? 6 : today - 1;
+
+  const byDay = {};
+  horarios.forEach(h => {
+    if (!byDay[h.dia_semana]) byDay[h.dia_semana] = [];
+    byDay[h.dia_semana].push(h);
+  });
+
+  const grid = document.getElementById('week-grid');
+  grid.innerHTML = DIAS.map((dia, idx) => `
+    <div class="day-col ${idx === todayIdx ? 'today' : ''}">
+      <div class="day-header">${dia}</div>
+      <div class="day-slots" id="slots-${idx}">
+        ${(byDay[idx] || []).map(h => renderSlot(h)).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderSlot(h) {
+  return `
+    <div class="slot" id="slot-${h.id}">
+      <div class="slot-info">
+        <span class="slot-time">${h.horario}</span>
+        <span class="slot-local" title="${h.local}">${h.local}</span>
+      </div>
+      <span class="slot-del" onclick="deletarHorario(${h.id})" title="Remover">×</span>
+    </div>
+  `;
+}
+
+document.getElementById('form-horario').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const diaSelecionado = fd.get('dia_semana');
+  try {
+    const res = await fetch(API + '/horarios', { method: 'POST', body: fd });
+    if (!res.ok) throw new Error((await res.json()).detail || 'Erro');
+    const h = await res.json();
+    const slots = document.getElementById('slots-' + h.dia_semana);
+    if (slots) slots.insertAdjacentHTML('beforeend', renderSlot(h));
+    toast('Horário adicionado!');
+    e.target.reset();
+    e.target.querySelector('[name="dia_semana"]').value = diaSelecionado;
+  } catch (err) {
+    toast(err.message, 'error');
+  }
+});
+
+async function deletarHorario(id) {
+  if (!confirm('Remover este horário da grade?')) return;
+  await fetch(API + '/horarios/' + id, { method: 'DELETE' });
+  document.getElementById('slot-' + id)?.remove();
+  toast('Horário removido');
+}
+
+async function loadAulasDia() {
+  const data = document.getElementById('agenda-data').value;
+  if (!data) return;
+  const aulas = await fetch(API + '/aulas?data=' + data).then(r => r.json());
+  renderAulasDia(aulas, data);
+}
+
+async function gerarAulasDia() {
+  const data = document.getElementById('agenda-data').value;
+  if (!data) { toast('Selecione uma data', 'error'); return; }
+  const fd = new FormData();
+  fd.append('data', data);
+  const aulas = await fetch(API + '/aulas/gerar', { method: 'POST', body: fd }).then(r => r.json());
+  renderAulasDia(aulas, data);
+  toast(aulas.length + ' aula(s) gerada(s) da grade!');
+}
+
+function renderAulasDia(aulas, data) {
+  const el = document.getElementById('aulas-dia');
+  if (!aulas.length) {
+    el.innerHTML = `<div class="empty">Nenhuma aula para ${data}.<br>Use "Gerar da grade" ou crie manualmente abaixo.</div>`;
+    return;
+  }
+  el.innerHTML = `
+    <table>
+      <thead><tr><th>Horário</th><th>Local</th><th>Check-ins</th><th>Processado</th><th></th></tr></thead>
+      <tbody>${aulas.map(a => `
+        <tr>
+          <td><strong>${a.horario}</strong></td>
+          <td>${a.local}</td>
+          <td><span class="tag tag-blue">${a.total_checkins}</span></td>
+          <td>${a.treino_processado ? '<span class="tag tag-green">Sim</span>' : '<span class="tag tag-gray">Não</span>'}</td>
+          <td>
+            <button class="btn btn-sm btn-outline" onclick="verCheckins(${a.id}, '${a.horario}', '${a.local}')">Check-ins</button>
+          </td>
+        </tr>
+      `).join('')}</tbody>
+    </table>
+  `;
+}
+
+// Gerenciar check-ins de uma aula
+let _checkinAulaId = null;
+let _todosAlunos = [];
+
+async function verCheckins(aulaId, horario, local) {
+  _checkinAulaId = aulaId;
+  const [checkins, alunos] = await Promise.all([
+    fetch(API + '/aulas/' + aulaId + '/checkins').then(r => r.json()),
+    fetch(API + '/alunos').then(r => r.json()),
+  ]);
+  _todosAlunos = alunos;
+
+  // Mostra abaixo da tabela
+  const el = document.getElementById('aulas-dia');
+  const checkinSection = document.getElementById('checkin-section') || (() => {
+    const d = document.createElement('div');
+    d.id = 'checkin-section';
+    d.style.marginTop = '1rem';
+    el.parentElement.appendChild(d);
+    return d;
+  })();
+
+  const idsComCheckin = new Set(checkins.map(c => c.aluno_id));
+
+  checkinSection.innerHTML = `
+    <div class="card">
+      <h2>Check-ins — ${horario} ${local}</h2>
+      <div class="form-row" style="margin-bottom:1rem">
+        <button class="btn btn-sm" onclick="abrirDialogCheckin()">+ Adicionar check-in</button>
+      </div>
+      <div class="checkin-list" id="checkin-list">
+        ${checkins.length
+          ? checkins.map(c => renderCheckinChip(c)).join('')
+          : '<span style="color:var(--text2);font-size:0.85rem">Nenhum check-in ainda.</span>'
+        }
+      </div>
+    </div>
+  `;
+}
+
+function renderCheckinChip(c) {
+  return `
+    <div class="checkin-chip" id="chip-${c.aluno_id}">
+      ${c.nome}
+      <span class="chip-del" onclick="removerCheckin(${c.aluno_id})" title="Remover">×</span>
+    </div>
+  `;
+}
+
+async function removerCheckin(alunoId) {
+  await fetch(API + `/aulas/${_checkinAulaId}/checkins/${alunoId}`, { method: 'DELETE' });
+  document.getElementById('chip-' + alunoId)?.remove();
+  toast('Check-in removido');
+}
+
+function abrirDialogCheckin() {
+  const sel = document.getElementById('dialog-checkin-aluno');
+  const checkinList = document.getElementById('checkin-list');
+  const existentes = new Set(
+    [...checkinList.querySelectorAll('.checkin-chip')].map(el => parseInt(el.id.replace('chip-', '')))
+  );
+
+  sel.innerHTML = _todosAlunos
+    .filter(a => !existentes.has(a.id))
+    .map(a => `<option value="${a.id}">${a.nome}</option>`)
+    .join('');
+
+  if (!sel.options.length) {
+    toast('Todos os alunos já têm check-in', 'error');
+    return;
+  }
+
+  document.getElementById('dialog-checkin').classList.add('active');
+}
+
+function fecharDialogCheckin() {
+  document.getElementById('dialog-checkin').classList.remove('active');
+}
+
+async function confirmarCheckin() {
+  const alunoId = parseInt(document.getElementById('dialog-checkin-aluno').value);
+  const fd = new FormData();
+  fd.append('aluno_id', alunoId);
+  try {
+    const res = await fetch(API + `/aulas/${_checkinAulaId}/checkins`, { method: 'POST', body: fd });
+    if (!res.ok) throw new Error((await res.json()).detail || 'Erro');
+    const data = await res.json();
+    fecharDialogCheckin();
+    const list = document.getElementById('checkin-list');
+    const emptySpan = list.querySelector('span');
+    if (emptySpan) emptySpan.remove();
+    list.insertAdjacentHTML('beforeend', renderCheckinChip({ aluno_id: alunoId, nome: data.aluno }));
+    toast(data.aluno + ' — check-in adicionado!');
+  } catch (err) {
+    toast(err.message, 'error');
+  }
+}
+
+document.getElementById('dialog-checkin').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) fecharDialogCheckin();
 });
 
 // --- Alunos ---
@@ -597,7 +1210,7 @@ async function loadTreinos() {
 
   el.innerHTML = `
     <table>
-      <thead><tr><th>ID</th><th>Data</th><th>Presentes</th><th>Nao ID</th><th>Total</th><th></th></tr></thead>
+      <thead><tr><th>ID</th><th>Data</th><th>Presentes</th><th>Não ID</th><th>Total</th><th></th></tr></thead>
       <tbody>${treinos.map(t => `
         <tr>
           <td>#${t.id}</td>
@@ -613,7 +1226,6 @@ async function loadTreinos() {
 }
 
 async function viewTreino(id) {
-  // Navigate to treinos page
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelector('[data-page="treinos"]').classList.add('active');
@@ -625,9 +1237,13 @@ async function viewTreino(id) {
 
   const treino = await fetch(API + '/treinos/' + id).then(r => r.json());
 
+  const validadas = (treino.presencas || []).filter(p => p.status === 'validada');
+  const recusadas = (treino.presencas || []).filter(p => p.status === 'recusada');
+  const pendentes = (treino.presencas || []).filter(p => p.status === 'pendente');
+
   el.innerHTML = `
     <div class="card">
-      <h2>Treino #${treino.id} - ${treino.data}</h2>
+      <h2>Treino #${treino.id} — ${treino.data}</h2>
       <div class="img-container" style="max-width:800px;margin:1rem 0" onclick="showImage(API + '/treinos/${id}/resultado')">
         <img src="${API}/treinos/${id}/resultado" alt="Resultado">
       </div>
@@ -635,24 +1251,56 @@ async function viewTreino(id) {
 
     <div class="grid">
       <div class="card">
-        <h2>Presentes (${treino.presentes.length})</h2>
-        ${treino.presentes.length ? `
+        <h2>Presenças Validadas (${validadas.length})</h2>
+        ${validadas.length ? `
           <table>
-            <thead><tr><th>Aluno</th><th>Distancia</th></tr></thead>
-            <tbody>${treino.presentes.map(p => `
+            <thead><tr><th>Aluno</th><th>Distância</th></tr></thead>
+            <tbody>${validadas.map(p => `
               <tr><td>${p.nome}</td><td>${p.distancia.toFixed(4)}</td></tr>
             `).join('')}</tbody>
           </table>
-        ` : '<div class="empty">Ninguem identificado</div>'}
+        ` : '<div class="empty">Ninguém identificado</div>'}
       </div>
 
+      ${recusadas.length ? `
+        <div class="card">
+          <h2>Presenças Recusadas (${recusadas.length})</h2>
+          <table>
+            <thead><tr><th>Aluno</th><th>Status</th></tr></thead>
+            <tbody>${recusadas.map(p => `
+              <tr><td>${p.nome}</td><td><span class="tag tag-red">ausente</span></td></tr>
+            `).join('')}</tbody>
+          </table>
+        </div>
+      ` : ''}
+
+      ${pendentes.length ? `
+        <div class="card">
+          <h2>Pendentes (${pendentes.length})</h2>
+          <table>
+            <thead><tr><th>Aluno</th><th>Distância</th><th></th></tr></thead>
+            <tbody>${pendentes.map(p => `
+              <tr id="detalhe-pendente-${p.id}">
+                <td>${p.nome}</td>
+                <td>${p.distancia.toFixed(4)}</td>
+                <td><button class="btn btn-sm btn-yellow" onclick="confirmarPresenca(${treino.id}, ${p.id})">Confirmar</button></td>
+              </tr>
+            `).join('')}</tbody>
+          </table>
+        </div>
+      ` : ''}
+
       <div class="card">
-        <h2>Nao Identificados (${treino.nao_identificados.length})</h2>
+        <h2>Não Identificados (${treino.nao_identificados.length})</h2>
         ${treino.nao_identificados.length ? `
           <div class="faces-grid">
             ${treino.nao_identificados.map(n => `
-              <div class="face-thumb" onclick="showImage(API + '/treinos/${id}/nao-identificados/${n.id}')">
-                <img src="${API}/treinos/${id}/nao-identificados/${n.id}" alt="?">
+              <div style="text-align:center">
+                <div class="face-thumb" onclick="showImage(API + '/treinos/${id}/nao-identificados/${n.id}')">
+                  <img src="${API}/treinos/${id}/nao-identificados/${n.id}" alt="?">
+                </div>
+                <button class="btn btn-sm" style="margin-top:0.4rem;width:100%"
+                  onclick="abrirDialogNomear(${id}, ${n.id})">Nomear</button>
               </div>
             `).join('')}
           </div>

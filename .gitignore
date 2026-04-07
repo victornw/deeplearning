@@ -11,3 +11,6 @@ wheels/
 
 # Dados
 data/
+
+CLAUDE.md
+*.python-version
